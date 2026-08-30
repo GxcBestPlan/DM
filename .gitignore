@@ -9,6 +9,11 @@ build/
 coverage/
 *.tsbuildinfo
 
+# Java / Maven
+target/
+*.class
+.mvn/wrapper/maven-wrapper.jar
+
 # 环境变量（密钥等敏感信息不入库）
 .env
 .env.*
