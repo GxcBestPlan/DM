@@ -1,11 +1,12 @@
 # DM
 
-前后端分离项目。
+前后端分离项目：迭代排期与进度管理系统（多小队两周迭代管理）。
 
 ## 项目结构
 
 ```
 DM/
+├── docs/        # 需求与设计文档（docs/requirements.md 等）
 ├── frontend/   # 前端：Vite + Vue 3（npm）
 └── backend/    # 后端：Spring Boot 2.7.18（JDK 8）+ Maven
 ```
