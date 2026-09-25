@@ -121,7 +121,7 @@ td.cell.conflict{background:#fdeaea;outline:2px solid #e0483e;outline-offset:-2p
 </header>
 
 <div class="banner">
-  这是<strong>静态原型（非可运行系统）</strong>，用于确认页面结构、字段与流程是否符合预期。切换右上角"模拟角色"可查看不同角色的菜单与权限差异；页面数据均为示例。
+  <strong>静态原型</strong>（非可运行系统）｜右上角可切换角色，页面数据为示例。
 </div>
 
 <div class="layout">
@@ -139,7 +139,6 @@ td.cell.conflict{background:#fdeaea;outline:2px solid #e0483e;outline-offset:-2p
       <a data-page="overview"  data-roles="sup,admin">跨队总览</a>
       <a data-page="reports"   data-roles="pm,dm,sup,admin">统计报表</a>
       <a data-page="org"       data-roles="admin">组织管理</a>
-      <a data-page="notes"     data-roles="pm,dm,dev,tester,sup,admin">原型评审要点</a>
     </nav>
   </aside>
 
@@ -237,7 +236,7 @@ td.cell.conflict{background:#fdeaea;outline:2px solid #e0483e;outline-offset:-2p
         </div>
         <div class="field"><label>描述</label><textarea rows="2">支持在订单详情页为订单添加内部备注，仅商家可见。</textarea></div>
         <div class="field"><label>验收标准（评审通过前必填）</label><textarea rows="2">1. 可新增/编辑/删除备注；2. 备注仅本队可见；3. 操作留痕。</textarea></div>
-        <div class="field"><label>外部依赖 / 跨队协调备注（选填）</label><input placeholder="如：依赖基础平台队导出组件 v2（本系统不建模跨队依赖）"></div>
+        <div class="field"><label>外部依赖 / 跨队协调备注（选填）</label><input placeholder="如：依赖基础平台队导出组件 v2，对接人 王工"></div>
         <button class="btn primary">保存</button> <button class="btn">取消</button>
       </div>
     </section>
@@ -247,7 +246,6 @@ td.cell.conflict{background:#fdeaea;outline:2px solid #e0483e;outline-offset:-2p
       <div class="pagehead"><h2>迭代管理</h2><div class="desc">创建迭代、排入需求、开始 / 关闭</div>
         <div class="actions"><button class="btn primary">+ 新建迭代</button></div>
       </div>
-      <div class="note warn">原型新增页面：需求文档未单列"迭代管理"页（创建/开关迭代、排入移出需求目前分散在 9.3/9.5）。请确认是否需要此独立页面。</div>
       <div class="card">
         <h3>当前迭代</h3>
         <div class="cols">
@@ -340,12 +338,12 @@ td.cell.conflict{background:#fdeaea;outline:2px solid #e0483e;outline-offset:-2p
           </div>
         </div>
       </div>
-      <div class="note">需求状态不含"联调中"（v1.0 决策）：开发任务全部完成即进入"待测试"；测试不通过退回"开发中"；任意状态可挂阻塞（红色标记）。已取消需求不在此展示。</div>
+      <div class="note">需求卡片上的红色标记表示该需求当前处于阻塞状态；全部开发任务完成后自动进入"待测试"。</div>
     </section>
 
     <!-- ============ 需求详情 ============ -->
     <section class="page" id="page-detail">
-      <div class="pagehead"><h2>需求详情</h2><div class="desc">看板点击需求后弹出（原型以整页展示）</div>
+      <div class="pagehead"><h2>需求详情</h2><div class="desc">需求描述、验收标准、任务与依赖、状态历史</div>
         <div class="actions"><button class="btn">编辑</button><button class="btn">挂阻塞</button><button class="btn danger">取消需求</button></div>
       </div>
       <div class="card">
@@ -357,7 +355,7 @@ td.cell.conflict{background:#fdeaea;outline:2px solid #e0483e;outline-offset:-2p
           <div class="k">创建人 / 时间</div><div>李静 ｜ 2026-08-31 10:12</div>
           <div class="k">描述</div><div>订单列表支持按筛选条件批量导出 Excel，导出超 5000 条走异步任务并站内通知。</div>
           <div class="k">验收标准</div><div>1. 导出内容与筛选一致；2. &gt;5000 条异步导出可查询进度；3. 导出操作记入操作日志。</div>
-          <div class="k">外部依赖备注</div><div>依赖基础平台队导出组件 v2（跨队协调，系统不建模）</div>
+          <div class="k">外部依赖备注</div><div>依赖基础平台队导出组件 v2 ｜ 对接人 王工</div>
         </div>
       </div>
       <div class="cols">
@@ -395,7 +393,6 @@ td.cell.conflict{background:#fdeaea;outline:2px solid #e0483e;outline-offset:-2p
         <span><span class="chip urgent" style="display:inline-block">插队任务</span></span>
         <span><span class="chip done" style="display:inline-block">已完成</span></span>
         <span>⚠ 红框 = 同一人同日任务重叠（冲突）</span>
-        <span>本期不做"周负载超限"自动预警</span>
       </div>
       <div class="gantt"><table id="gantt"></table></div>
       <div class="card" style="margin-top:14px">
@@ -485,7 +482,7 @@ td.cell.conflict{background:#fdeaea;outline:2px solid #e0483e;outline-offset:-2p
     <!-- ============ 跨队总览 ============ -->
     <section class="page" id="page-overview">
       <div class="pagehead"><h2>跨队总览</h2><div class="desc">只读视图（跨队管理者）｜可下钻任意小队的看板与管道</div></div>
-      <div class="note">跨队管理者为<strong>只读总览 + 全部队报表</strong>，不直接操作其他小队的排期（v1.0 决策 1）。</div>
+      <div class="note">本页为<strong>只读视图</strong>：可查看与下钻各小队进度，不能修改其他小队的排期。</div>
       <div class="cols">
         <div class="card">
           <h3>交易研发一队 <span class="badge b-green">正常</span></h3>
@@ -626,40 +623,6 @@ td.cell.conflict{background:#fdeaea;outline:2px solid #e0483e;outline-offset:-2p
             <tr><td>周敏</td><td>zhoumin</td><td><span class="badge b-orange">测试</span></td><td><span class="badge b-gray">停用</span></td><td><button class="btn sm">配置角色</button> <button class="btn sm">重置密码</button> <button class="btn sm primary">启用</button></td></tr>
           </tbody>
         </table>
-      </div>
-    </section>
-
-    <!-- ============ 原型评审要点 ============ -->
-    <section class="page" id="page-notes">
-      <div class="pagehead"><h2>原型评审要点</h2><div class="desc">请重点确认以下设计与字段，确认后再进入编码</div></div>
-      <div class="note">本原型覆盖需求文档 §9 的全部页面；下列为已按 v1.0 决策呈现、以及需要你确认的交互细节。</div>
-      <div class="card">
-        <h3>已按 v1.0 决策呈现</h3>
-        <ul class="checklist">
-          <li>需求状态<strong>无"联调中"</strong>：开发任务全部完成 → 待测试；测试退回 → 开发中。</li>
-          <li><strong>验收标准</strong>：录入可留空，登记"评审通过"前必填（需求池页已体现）。</li>
-          <li><strong>插队</strong>：仅提示受影响人员与重叠，不自动顺延（迭代管理页已体现）。</li>
-          <li><strong>跨队管理者只读</strong>：可下钻看板/管道，无操作按钮。</li>
-          <li><strong>已发布</strong>：验收后由开发管理者手动标记。</li>
-          <li><strong>任务依赖</strong>：仅顺序提示、不阻断状态流转。</li>
-          <li><strong>阻塞</strong>：任意状态可挂（必填原因），历史里记录时长。</li>
-          <li><strong>管道冲突</strong>：只高亮"同一人同日任务重叠"，不做周负载红线预警。</li>
-        </ul>
-      </div>
-      <div class="card">
-        <h3>需要你确认 / 可能调整的点</h3>
-        <ol class="checklist">
-          <li><strong>新增"迭代管理"页</strong>：需求文档未单列，迭代创建/开始/关闭/排入移出目前分散在需求池与管道视图，是否需要独立成页？</li>
-          <li><strong>需求详情</strong>：字段是否齐全（描述、验收标准、外部依赖备注、任务与依赖、状态历史）？是否需要"需求变更记录/附件"？</li>
-          <li><strong>看板列</strong>：已排期 / 开发中 / 待测试 / 测试中 / 已验收 / 已发布 六列是否合适？是否需要"已取消"单列？</li>
-          <li><strong>需求池</strong>：是否需要"批量操作"（批量排入/批量取消）？筛选是否还缺（创建人、时间范围）？</li>
-          <li><strong>管道排期</strong>：人员×日期按"天"是否够用（vs 半天）？任务是否允许跨天自动拆分显示？</li>
-          <li><strong>我的任务</strong>：操作是否够少（开始/完成/备注/阻塞）？是否需要"今日应开始"提醒区？</li>
-          <li><strong>测试工作台</strong>：是否需要"测试用例/缺陷单"记录，还是仅通过/退回？</li>
-          <li><strong>统计报表</strong>：指标是否够（完成率、按期完成率、插队占比、阻塞时长、状态分布、趋势、人均负载、跨队对比）？</li>
-          <li><strong>组织管理</strong>：账号是否需要"批量导入成员"？（需求文档明确本期不导入历史数据，仅人工录入）</li>
-          <li><strong>导航结构</strong>：左侧菜单按角色显隐是否清楚？是否需要顶部"消息通知"（如待我处理提醒）？</li>
-        </ol>
       </div>
     </section>
 
