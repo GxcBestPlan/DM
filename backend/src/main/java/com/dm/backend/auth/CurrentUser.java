@@ -61,9 +61,44 @@ public class CurrentUser {
         return globalRole == GlobalRole.ADMIN;
     }
 
+    public boolean isSupervisor() {
+        return globalRole == GlobalRole.SUPERVISOR;
+    }
+
     public void requireAdmin() {
         if (!isAdmin()) {
             throw ApiException.forbidden("需要系统管理员权限");
         }
+    }
+
+    /** ADMIN 或队内任一指定角色。 */
+    public void requireAnyRole(MemberRole... wanted) {
+        if (isAdmin()) {
+            return;
+        }
+        for (MemberRole role : wanted) {
+            if (roles.contains(role)) {
+                return;
+            }
+        }
+        throw ApiException.forbidden("无操作权限");
+    }
+
+    /** ADMIN / 跨队管理者可访问任意小队；其他角色只能访问本小队。 */
+    public void requireTeamAccess(Long teamId) {
+        if (isAdmin() || isSupervisor()) {
+            return;
+        }
+        if (teamId == null || !teamId.equals(this.teamId)) {
+            throw ApiException.forbidden("只能访问本小队数据");
+        }
+    }
+
+    /** 写操作一律以本人所属小队为准；未入队（如新建账号）不允许写业务数据。 */
+    public Long requireTeamId() {
+        if (teamId == null) {
+            throw ApiException.badRequest("你尚未加入任何小队，请联系管理员");
+        }
+        return teamId;
     }
 }

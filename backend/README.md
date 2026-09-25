@@ -67,6 +67,12 @@ curl -s -X POST http://localhost:8080/api/org/teams -H "Authorization: Bearer <t
 | `GET/POST /api/org/teams`、`PUT/DELETE /api/org/teams/{id}` | 小队查询/新建/改名/删除 |
 | `GET/POST /api/org/teams/{id}/members`、`PUT/DELETE .../members/{userId}` | 成员加入/移除、多角色配置 |
 | `GET/POST /api/org/users`、`PUT /api/org/users/{id}/status`、`POST /api/org/users/{id}/password` | 账号创建、启用/停用、重置密码 |
+| `GET /api/requirements?sprintId=` | 需求列表（不带 sprintId = 需求池；支持 type/status/createdBy/keyword 筛选） |
+| `POST /api/requirements`、`PUT /api/requirements/{id}`、`PUT /api/requirements/pool-order` | 录入、编辑、拖拽定序（PM） |
+| `POST /api/requirements/{id}/review` | 登记评审结论：通过前验收标准必填；退回意见必填 |
+| `POST /api/requirements/{id}/schedule`、`/unschedule`、`/dev`、`/ready-for-test`、`/publish`、`/block`、`/unblock`、`/cancel` | 排入/插队/移出、迭代内推进、阻塞、取消（开发管理者） |
+| `POST /api/requirements/{id}/claim`、`/accept`、`/reject` | 测试领取、通过、退回（测试） |
+| `GET/POST /api/sprints`、`POST /api/sprints/{id}/start`、`/close`、`/reopen`、`GET /api/sprints/{id}` | 迭代查询/创建/开始/关闭/重开 |
 
 > 一个用户只属于一个小队：加入新队时会自动移除旧队的成员行（见 `OrgService.addMember`）。
 
