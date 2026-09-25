@@ -1,6 +1,7 @@
 package com.dm.backend.entity;
 
 import com.dm.backend.entity.enums.GlobalRole;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 
@@ -44,6 +45,7 @@ public class SysUser extends BaseEntity {
         this.account = account;
     }
 
+    @JsonIgnore
     public String getPasswordHash() {
         return passwordHash;
     }

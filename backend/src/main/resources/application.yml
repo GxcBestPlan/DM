@@ -19,3 +19,9 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
+
+dm:
+  jwt:
+    # 开发默认值；生产部署请改环境变量覆盖
+    secret: dm-dev-secret-key-please-change-in-production-0123456789
+    expire-hours: 12
