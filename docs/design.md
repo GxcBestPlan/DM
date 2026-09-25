@@ -246,4 +246,4 @@ CREATE TABLE status_log (
 
 1. 后端：按本 DDL 建实体 + Repository + DDL 脚本（`schema.sql` 或启动 `ddl-auto` 对齐），删 demo `item`
 2. 后端：状态机 transition 服务 + 校验清单单元化（先做需求池与迭代管理闭环）
-3. 前端：路由 + 登录 + 需求池页 → 迭代看板 → 其余页面
+3. 前端：路由 + 登录 + 需求池页 → 迭代管理 → 迭代看板 → 其余页面
