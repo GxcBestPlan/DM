@@ -73,6 +73,11 @@ curl -s -X POST http://localhost:8080/api/org/teams -H "Authorization: Bearer <t
 | `POST /api/requirements/{id}/schedule`、`/unschedule`、`/dev`、`/ready-for-test`、`/publish`、`/block`、`/unblock`、`/cancel` | 排入/插队/移出、迭代内推进、阻塞、取消（开发管理者） |
 | `POST /api/requirements/{id}/claim`、`/accept`、`/reject` | 测试领取、通过、退回（测试） |
 | `GET/POST /api/sprints`、`POST /api/sprints/{id}/start`、`/close`、`/reopen`、`GET /api/sprints/{id}` | 迭代查询/创建/开始/关闭/重开 |
+| `GET/POST /api/requirements/{id}/tasks`、`PUT/DELETE /api/tasks/{id}` | 任务拆解、改派、计划日期、删除（开发管理者） |
+| `POST /api/tasks/{id}/dependencies`、`DELETE .../dependencies/{dependsOnTaskId}` | 任务依赖（仅前端依赖后端、同需求内、禁环） |
+| `POST /api/tasks/{id}/start`、`/complete`、`/progress`、`/block`、`/unblock` | 开发推进（负责人或开发管理者）：首个任务开始→需求转开发中；全部完成→需求转待测试 |
+| `PUT /api/tasks/{id}/schedule`、`GET /api/sprints/{id}/pipeline` | 管道排期：人员×日期、同日重叠冲突、未排期任务 |
+| `GET /api/tasks/mine?scope=today` | 我的任务（scope 默认 all；today 为进行中 + 今日应开始） |
 
 > 一个用户只属于一个小队：加入新队时会自动移除旧队的成员行（见 `OrgService.addMember`）。
 

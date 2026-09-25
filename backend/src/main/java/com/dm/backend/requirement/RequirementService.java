@@ -5,6 +5,7 @@ import com.dm.backend.common.Responses;
 import com.dm.backend.entity.Requirement;
 import com.dm.backend.entity.Sprint;
 import com.dm.backend.entity.Task;
+import com.dm.backend.entity.TaskDependency;
 import com.dm.backend.entity.enums.LogObjectType;
 import com.dm.backend.entity.enums.RequirementStatus;
 import com.dm.backend.entity.enums.RequirementType;
@@ -12,6 +13,7 @@ import com.dm.backend.entity.enums.SprintStatus;
 import com.dm.backend.repository.RequirementRepository;
 import com.dm.backend.repository.SprintRepository;
 import com.dm.backend.repository.SysUserRepository;
+import com.dm.backend.repository.TaskDependencyRepository;
 import com.dm.backend.repository.TaskRepository;
 import com.dm.backend.status.StatusLogService;
 import org.springframework.stereotype.Service;
@@ -46,14 +48,17 @@ public class RequirementService {
     private final RequirementRepository requirements;
     private final SprintRepository sprints;
     private final TaskRepository tasks;
+    private final TaskDependencyRepository dependencies;
     private final SysUserRepository users;
     private final StatusLogService statusLogs;
 
     public RequirementService(RequirementRepository requirements, SprintRepository sprints,
-                              TaskRepository tasks, SysUserRepository users, StatusLogService statusLogs) {
+                              TaskRepository tasks, TaskDependencyRepository dependencies,
+                              SysUserRepository users, StatusLogService statusLogs) {
         this.requirements = requirements;
         this.sprints = sprints;
         this.tasks = tasks;
+        this.dependencies = dependencies;
         this.users = users;
         this.statusLogs = statusLogs;
     }
@@ -91,8 +96,8 @@ public class RequirementService {
     @Transactional(readOnly = true)
     public Map<String, Object> detail(Long id) {
         Requirement requirement = require(id);
-        Map<String, Object> view = view(requirement, userNames(),
-                tasks.findByRequirementIdOrderBySortAsc(id));
+        List<Task> taskRows = tasks.findByRequirementIdOrderBySortAsc(id);
+        Map<String, Object> view = view(requirement, userNames(), taskRows, dependencyIdsByTask(taskRows));
         view.put("history", statusLogs.history(LogObjectType.REQUIREMENT, id).stream()
                 .map(log -> Responses.map(
                         "fromStatus", log.getFromStatus(),
@@ -401,19 +406,36 @@ public class RequirementService {
 
     private List<Map<String, Object>> toViews(List<Requirement> rows) {
         Map<Long, String> names = userNames();
-        Map<Long, List<Task>> tasksByRequirement = rows.isEmpty() ? Collections.emptyMap()
+        List<Task> allTasks = rows.isEmpty() ? Collections.emptyList()
                 : tasks.findByRequirementIdInOrderBySortAsc(rows.stream()
-                        .map(Requirement::getId).collect(Collectors.toList())).stream()
+                        .map(Requirement::getId).collect(Collectors.toList()));
+        Map<Long, List<Task>> tasksByRequirement = allTasks.stream()
                 .collect(Collectors.groupingBy(Task::getRequirementId, LinkedHashMap::new, Collectors.toList()));
+        Map<Long, List<Long>> dependencyIds = dependencyIdsByTask(allTasks);
         List<Map<String, Object>> result = new ArrayList<>();
         for (Requirement requirement : rows) {
             result.add(view(requirement, names,
-                    tasksByRequirement.getOrDefault(requirement.getId(), Collections.emptyList())));
+                    tasksByRequirement.getOrDefault(requirement.getId(), Collections.emptyList()),
+                    dependencyIds));
         }
         return result;
     }
 
-    private Map<String, Object> view(Requirement requirement, Map<Long, String> names, List<Task> taskRows) {
+    private Map<Long, List<Long>> dependencyIdsByTask(List<Task> taskRows) {
+        if (taskRows.isEmpty()) {
+            return Collections.emptyMap();
+        }
+        Map<Long, List<Long>> map = new HashMap<>();
+        for (TaskDependency dependency : dependencies.findByTaskIdIn(
+                taskRows.stream().map(Task::getId).collect(Collectors.toList()))) {
+            map.computeIfAbsent(dependency.getTaskId(), key -> new ArrayList<>())
+                    .add(dependency.getDependsOnTaskId());
+        }
+        return map;
+    }
+
+    private Map<String, Object> view(Requirement requirement, Map<Long, String> names,
+                                     List<Task> taskRows, Map<Long, List<Long>> dependencyIds) {
         return Responses.map(
                 "id", requirement.getId(),
                 "title", requirement.getTitle(),
@@ -442,7 +464,9 @@ public class RequirementService {
                         "progressNote", task.getProgressNote(),
                         "plannedStartDate", task.getPlannedStartDate(),
                         "plannedEndDate", task.getPlannedEndDate(),
-                        "completedAt", task.getCompletedAt())).collect(Collectors.toList()));
+                        "completedAt", task.getCompletedAt(),
+                        "dependsOnTaskIds", dependencyIds.getOrDefault(task.getId(), Collections.emptyList())))
+                        .collect(Collectors.toList()));
     }
 
     private Map<Long, String> userNames() {

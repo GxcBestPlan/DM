@@ -307,7 +307,7 @@ class RequirementLifecycleApiTest {
         MvcResult poolList = mvc.perform(get("/api/requirements").header("Authorization", bearer(pmToken)))
                 .andExpect(status().isOk())
                 .andReturn();
-        JsonNode pool = om.readTree(poolList.getResponse().getContentAsString());
+        JsonNode pool = om.readTree(poolList.getResponse().getContentAsByteArray());
         for (JsonNode item : pool) {
             assertNotEquals(reqE, item.get("id").asLong(), "已取消需求不应出现在需求池列表");
         }
@@ -338,7 +338,7 @@ class RequirementLifecycleApiTest {
                 .content(json(mapOf("account", account, "password", password))))
                 .andExpect(status().isOk())
                 .andReturn();
-        return om.readTree(result.getResponse().getContentAsString()).get("token").asText();
+        return om.readTree(result.getResponse().getContentAsByteArray()).get("token").asText();
     }
 
     private long createRequirement(String title, String estimate, String acceptanceCriteria) throws Exception {
@@ -371,7 +371,7 @@ class RequirementLifecycleApiTest {
     }
 
     private long idOf(MvcResult result) throws Exception {
-        JsonNode node = om.readTree(result.getResponse().getContentAsString());
+        JsonNode node = om.readTree(result.getResponse().getContentAsByteArray());
         return node.get("id").asLong();
     }
 

@@ -13,6 +13,8 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 
     List<Task> findByRequirementIdInOrderBySortAsc(Collection<Long> requirementIds);
 
+    List<Task> findByAssigneeIdOrderByPlannedStartDateAsc(Long assigneeId);
+
     long countByRequirementId(Long requirementId);
 
     long countByRequirementIdAndStatus(Long requirementId, TaskStatus status);

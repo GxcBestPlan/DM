@@ -160,11 +160,11 @@ class AuthAndOrgApiTest {
     }
 
     private String tokenOf(MvcResult result) throws Exception {
-        return om.readTree(result.getResponse().getContentAsString()).get("token").asText();
+        return om.readTree(result.getResponse().getContentAsByteArray()).get("token").asText();
     }
 
     private long idOf(MvcResult result) throws Exception {
-        JsonNode node = om.readTree(result.getResponse().getContentAsString());
+        JsonNode node = om.readTree(result.getResponse().getContentAsByteArray());
         return node.get("id").asLong();
     }
 

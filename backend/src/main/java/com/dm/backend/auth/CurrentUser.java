@@ -65,6 +65,10 @@ public class CurrentUser {
         return globalRole == GlobalRole.SUPERVISOR;
     }
 
+    public boolean hasTeamRole(MemberRole role) {
+        return roles.contains(role);
+    }
+
     public void requireAdmin() {
         if (!isAdmin()) {
             throw ApiException.forbidden("需要系统管理员权限");
