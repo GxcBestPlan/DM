@@ -13,5 +13,8 @@ public interface RequirementRepository extends JpaRepository<Requirement, Long> 
     /** 某迭代内的需求。 */
     List<Requirement> findBySprintIdOrderByPoolSeqAsc(Long sprintId);
 
+    /** 本队全部需求（含池内与各迭代），测试队列等跨迭代查询用。 */
+    List<Requirement> findByTeamIdOrderByIdAsc(Long teamId);
+
     boolean existsByTeamId(Long teamId);
 }

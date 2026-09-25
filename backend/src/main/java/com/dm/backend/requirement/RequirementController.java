@@ -35,10 +35,11 @@ public class RequirementController {
 
     // ---------- 查询 ----------
 
-    /** 不带 sprintId = 需求池；带 sprintId = 该迭代内需求。 */
+    /** 不带 sprintId = 需求池；带 sprintId = 该迭代内需求；all=true 则跨迭代返回本队全部需求。 */
     @GetMapping
     public List<Map<String, Object>> list(@RequestParam(required = false) Long teamId,
                                           @RequestParam(required = false) Long sprintId,
+                                          @RequestParam(required = false, defaultValue = "false") boolean all,
                                           @RequestParam(required = false) RequirementType type,
                                           @RequestParam(required = false) RequirementStatus status,
                                           @RequestParam(required = false) Long createdBy,
@@ -46,6 +47,9 @@ public class RequirementController {
         CurrentUser user = AuthContext.require();
         Long scopeTeam = teamId != null ? teamId : user.requireTeamId();
         user.requireTeamAccess(scopeTeam);
+        if (all) {
+            return requirementService.listAll(scopeTeam, type, status, createdBy, keyword);
+        }
         return requirementService.list(scopeTeam, sprintId, type, status, createdBy, keyword);
     }
 

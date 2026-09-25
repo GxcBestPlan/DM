@@ -93,6 +93,20 @@ public class RequirementService {
         return require(id);
     }
 
+    /** 本队全部需求（跨迭代，含池内）：测试队列、跨迭代筛选用。 */
+    @Transactional(readOnly = true)
+    public List<Map<String, Object>> listAll(Long teamId, RequirementType type, RequirementStatus status,
+                                             Long createdBy, String keyword) {
+        List<Requirement> filtered = requirements.findByTeamIdOrderByIdAsc(teamId).stream()
+                .filter(r -> r.getStatus() != RequirementStatus.CANCELLED)
+                .filter(r -> type == null || r.getType() == type)
+                .filter(r -> status == null || r.getStatus() == status)
+                .filter(r -> createdBy == null || createdBy.equals(r.getCreatedBy()))
+                .filter(r -> matchesKeyword(r, keyword))
+                .collect(Collectors.toList());
+        return toViews(filtered);
+    }
+
     @Transactional(readOnly = true)
     public Map<String, Object> detail(Long id) {
         Requirement requirement = require(id);

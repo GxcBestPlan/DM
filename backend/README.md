@@ -78,6 +78,10 @@ curl -s -X POST http://localhost:8080/api/org/teams -H "Authorization: Bearer <t
 | `POST /api/tasks/{id}/start`、`/complete`、`/progress`、`/block`、`/unblock` | 开发推进（负责人或开发管理者）：首个任务开始→需求转开发中；全部完成→需求转待测试 |
 | `PUT /api/tasks/{id}/schedule`、`GET /api/sprints/{id}/pipeline` | 管道排期：人员×日期、同日重叠冲突、未排期任务 |
 | `GET /api/tasks/mine?scope=today` | 我的任务（scope 默认 all；today 为进行中 + 今日应开始） |
+| `GET /api/requirements?all=true&status=READY_FOR_TEST` | 跨迭代查询（测试工作台队列等） |
+| `GET /api/overview` | 跨队总览：各队当前迭代进度、负载、延期风险（仅 supervisor/ADMIN） |
+| `GET /api/reports/teams` | 跨队汇总：完成率对比 + 各队延期风险 Top（仅 supervisor/ADMIN） |
+| `GET /api/reports/sprints/{id}` | 迭代报告：完成率、按期完成率、状态分布、按天趋势、插队占比、阻塞时长、人均负载 |
 
 > 一个用户只属于一个小队：加入新队时会自动移除旧队的成员行（见 `OrgService.addMember`）。
 
