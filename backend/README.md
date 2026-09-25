@@ -37,21 +37,28 @@ mvn package                  # 打包可执行 jar
 启动后验证：
 
 ```sh
-curl http://localhost:8080/api/hello    # 基础接口
-curl http://localhost:8080/api/items    # 数据库 CRUD（列表）
+curl http://localhost:8080/api/hello    # 基础接口（业务接口开发中）
 ```
+
+## 数据库表结构
+
+8 张表由 `src/main/resources/schema.sql` 在启动时自动创建（`spring.sql.init.mode=always`，可重复执行）；`spring.jpa.hibernate.ddl-auto=none`，以脚本为唯一真相，表结构说明见 `../docs/design.md`。
+
+- 业务表：`sys_user`、`team`、`team_member`、`sprint`、`requirement`、`task`、`task_dependency`、`status_log`
+- `mvn test` 需先启动本机 MySQL（测试会真实读写 `dm` 库，事务回滚不留数据）
 
 ## 结构
 
 ```
 src/main/java/com/dm/backend/
 ├── BackendApplication.java            # 启动类
-├── controller/
-│   ├── HelloController.java           # 示例接口 /api/hello
-│   └── ItemController.java            # 数据库集成演示 /api/items
-├── entity/Item.java                   # JPA 实体（示例）
-└── repository/ItemRepository.java     # Spring Data JPA 仓库
-src/main/resources/application.yml     # 配置（端口 8080 + 数据源）
+├── controller/HelloController.java    # 示例接口 /api/hello
+├── entity/                            # 8 个 JPA 实体 + BaseEntity
+│   └── enums/                         # 角色/类型/状态枚举（库内存 code）
+└── repository/                        # 8 个 Spring Data JPA 仓库
+src/main/resources/
+├── application.yml                    # 端口 8080 + 数据源
+└── schema.sql                         # 建表脚本（唯一真相）
 ```
 
 Maven 代理已配置在 `~/.m2/settings.xml`（走本机代理 127.0.0.1:7890）。

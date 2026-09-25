@@ -130,7 +130,7 @@ CREATE TABLE task (
   type              VARCHAR(10)  NOT NULL COMMENT 'FRONTEND/BACKEND',
   title             VARCHAR(200) NOT NULL,
   assignee_id       BIGINT       NULL COMMENT '负责人, 空=未分配',
-  status            VARCHAR(10)  NOT NULL DEFAULT 'TODO' COMMENT 'TODO/IN_PROGRESS/DONE',
+  status            VARCHAR(20) NOT NULL DEFAULT 'TODO' COMMENT 'TODO/IN_PROGRESS/DONE',
   sort              INT          NOT NULL DEFAULT 0 COMMENT '需求内展示排序',
   progress_note     VARCHAR(500) NULL COMMENT '最新进展备注(一句话)',
   planned_start_date DATE        NULL COMMENT '管道排期起始日',
@@ -165,7 +165,7 @@ CREATE TABLE task_dependency (
 -- 状态日志（需求/任务全量流转；意见/原因放 comment；自环表示挂阻塞/解除/评审退回等不换状态的留痕）
 CREATE TABLE status_log (
   id          BIGINT       NOT NULL AUTO_INCREMENT,
-  object_type VARCHAR(10)  NOT NULL COMMENT 'REQUIREMENT/TASK',
+  object_type VARCHAR(20)  NOT NULL COMMENT 'REQUIREMENT/TASK',
   object_id   BIGINT       NOT NULL,
   from_status VARCHAR(20)  NULL COMMENT 'NULL=对象创建',
   to_status   VARCHAR(20)  NOT NULL,
