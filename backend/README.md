@@ -43,8 +43,10 @@ curl http://localhost:8080/api/hello    # 基础接口（业务接口开发中�
 ## 鉴权与接口
 
 - 除 `/api/auth/login`、`/api/hello` 外，所有 `/api/**` 需带 `Authorization: Bearer <token>`；组织管理接口仅 `ADMIN` 可用（无权限返回 403）。
+- 例外：`GET /api/org/teams/{id}/members` 本队成员可读（排期选人需要），写操作仍限 `ADMIN`。
 - 首次启动且库中无任何账号时，自动创建管理员 `admin` / `admin123`（请登录后尽快重置密码）。
 - JWT 有效期 12 小时，密钥见 `application.yml` 的 `dm.jwt.secret`（生产部署用环境变量覆盖）。
+- 需要演示数据时执行 `../scripts/seed-demo.sh`（一个小队 + 6 个角色账号 + 进行中的迭代）。
 
 ```sh
 # 登录拿 token
@@ -65,7 +67,7 @@ curl -s -X POST http://localhost:8080/api/org/teams -H "Authorization: Bearer <t
 | `POST /api/auth/login` | 登录，返回 token 与用户信息（含所属小队、队内角色） |
 | `GET /api/auth/me` | 当前登录用户（前端刷新后恢复登录态） |
 | `GET/POST /api/org/teams`、`PUT/DELETE /api/org/teams/{id}` | 小队查询/新建/改名/删除 |
-| `GET/POST /api/org/teams/{id}/members`、`PUT/DELETE .../members/{userId}` | 成员加入/移除、多角色配置 |
+| `GET/POST /api/org/teams/{id}/members`、`PUT/DELETE .../members/{userId}` | 成员加入/移除、多角色配置（GET 本队成员可读，写限 ADMIN） |
 | `GET/POST /api/org/users`、`PUT /api/org/users/{id}/status`、`POST /api/org/users/{id}/password` | 账号创建、启用/停用、重置密码 |
 | `GET /api/requirements?sprintId=` | 需求列表（不带 sprintId = 需求池；支持 type/status/createdBy/keyword 筛选） |
 | `POST /api/requirements`、`PUT /api/requirements/{id}`、`PUT /api/requirements/pool-order` | 录入、编辑、拖拽定序（PM） |

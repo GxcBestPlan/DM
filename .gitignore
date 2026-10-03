@@ -31,6 +31,8 @@ pnpm-debug.log*
 .tmp/
 .eslintcache
 .prettiercache
+# 本地截图自检产物（headless Chrome 的 profile 与截图）
+.shots/
 
 # IDE / 编辑器
 .idea/

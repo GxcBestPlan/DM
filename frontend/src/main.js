@@ -1,5 +1,9 @@
 import { createApp } from 'vue'
-import './style.css'
+import './ui.css'
 import App from './App.vue'
+import router from './router'
+import { restore } from './session'
 
-createApp(App).mount('#app')
+restore().then(() => {
+  createApp(App).use(router).mount('#app')
+})

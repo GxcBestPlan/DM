@@ -56,9 +56,10 @@ public class OrgController {
 
     // ---------- 成员与角色 ----------
 
+    /** 队内成员名单：排期选人需要，本队成员均可读；组织配置仍限 ADMIN。 */
     @GetMapping("/teams/{teamId}/members")
     public List<Map<String, Object>> listMembers(@PathVariable Long teamId) {
-        adminOnly();
+        AuthContext.require().requireTeamAccess(teamId);
         return orgService.listMembers(teamId);
     }
 

@@ -452,6 +452,7 @@ public class RequirementService {
                                      List<Task> taskRows, Map<Long, List<Long>> dependencyIds) {
         return Responses.map(
                 "id", requirement.getId(),
+                "teamId", requirement.getTeamId(),
                 "title", requirement.getTitle(),
                 "description", requirement.getDescription(),
                 "type", requirement.getType(),
@@ -474,6 +475,7 @@ public class RequirementService {
                         "type", task.getType(),
                         "status", task.getStatus(),
                         "assigneeId", task.getAssigneeId(),
+                        "assigneeName", task.getAssigneeId() == null ? null : names.get(task.getAssigneeId()),
                         "blocked", task.getBlocked(),
                         "progressNote", task.getProgressNote(),
                         "plannedStartDate", task.getPlannedStartDate(),

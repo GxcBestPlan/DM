@@ -116,6 +116,12 @@ class AuthAndOrgApiTest {
         mvc.perform(get("/api/org/users").header("Authorization", bearer(pmToken)))
                 .andExpect(status().isForbidden());
 
+        // 但本队成员可以读成员名单（排期选人需要）
+        mvc.perform(get("/api/org/teams/" + teamId + "/members").header("Authorization", bearer(pmToken)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(1))
+                .andExpect(jsonPath("$[0].account").value(pmAccount));
+
         // /api/auth/me 返回所属小队与角色
         mvc.perform(get("/api/auth/me").header("Authorization", bearer(pmToken)))
                 .andExpect(status().isOk())
